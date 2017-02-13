@@ -1,0 +1,115 @@
+;Dominik J Pruss
+;Casey Coffman
+;Lab 0 465
+
+
+; Include derivative-specific definitions
+            INCLUDE 'derivative.inc'
+            
+
+; export symbols
+            XDEF _Startup, main
+            ; we export both '_Startup' and 'main' as symbols. Either can
+            ; be referenced in the linker .prm file or from C/C++ later on
+            
+            
+            
+            XREF __SEG_END_SSTACK   ; symbol defined by the linker for the end of the stack
+
+RAMSPACE	EQU $F0		;RAM memory Location
+PORTB 		EQU PTBD
+
+
+
+	org RAMSPACE ;
+Counter1:   DS.B 1
+Counter2: 	DS.B 1
+Counter3: 	DS.B 1
+LEDStatus:	DS.B 1
+
+main:
+
+
+_Startup:
+			
+			CLR Counter1
+			CLR Counter2 ; resetting variables in case of carry over
+			CLR Counter3
+			CLR LEDStatus
+			
+			LDA #%01010010
+			STA SOPT1 ; Turning off watchdog	
+			
+			
+			LDA #%01100001
+			STA ADCSC1 ; setting up the  status and control register for the a-d, with interupts enabled, continuous conversion enabled and 
+			BCLR 6, ADCSC2 ; setting up continous conversion to hardware 
+			BSET 1, APCTL1 ; setting input pin for A-D as pin 1
+			
+			LDA #%00001010
+			STA TPMSC; setting up clock
+			LDA #%01001110
+			STA TPMMODH ;setting up upper register
+			LDA #%00010000
+			STA TPMMODL ; setting up the lower register
+			
+			
+			
+			
+			
+			BSET 6, PTBDD
+			BSET 7, PTBDD ; setting up LED's as outputs
+			BSET 6, PTBD;
+			BSET 7, PTBD; ; turning them all off
+		
+
+mainLoop:
+			
+            BRA    Delay
+		
+
+LEDToggle:
+	LDA LEDStatus
+	BEQ LEDOn
+	
+LEDOff:
+	BSET 6, PTBD
+	DEC LEDStatus ; should set to 0 letting us know it's off
+	BRA Delay
+
+LEDOn:
+	BCLR 6, PTBD ; turn on LED
+	INC LEDStatus ; letting us know the led is on
+	BRA Delay
+
+Delay:
+	LDA Counter1 ; First counter bytes
+	ADC #1 ; increment by 1
+	STA Counter1 ; store value
+	BCC Delay ; keep adding up by 1 if the carry bit hasn't happened
+	
+	CLC ; clears the Carry bit
+	LDA #00 ; load a 0
+	STA Counter1 ; reset counter1
+	LDA Counter2 ; our second counter in loop
+	ADC #1 ; increment by one
+	STA Counter2  ; store in our second loop counter
+	BCC Delay ; branch to the carry if we haven't done this 255 times
+
+	CLC ; clears the Carry bit
+	LDA #00 ; load a 0
+	STA Counter2 ; reset counter1
+	LDA Counter3 ; our second counter in loop
+	ADC #40 ; increment by one
+	STA Counter3  ; store in our second loop counter
+	BCC Delay ; branch to the carry if we haven't done this 255 times
+	
+
+	CLC
+	LDA #00 ; load a zero
+	STA Counter3; resetting counter 3
+	
+	BRA LEDToggle
+
+
+
