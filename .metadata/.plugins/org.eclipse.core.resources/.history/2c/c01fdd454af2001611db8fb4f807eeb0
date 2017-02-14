@@ -1,0 +1,57 @@
+;Dominik J Pruss
+
+;Lab 1 465 
+
+
+; Include derivative-specific definitions
+            INCLUDE 'derivative.inc'
+            
+
+; export symbols
+            XDEF CheckPress;
+            XREF __SEG_END_SSTACK, Selector, SetupPattern   ; symbol defined by the linker for the end of the stack
+
+
+
+
+
+
+
+
+MY_ZEROPAGE: SECTION  SHORT         ; Insert here your data definition
+KeyPress:	DS.B 1
+
+
+
+
+MyCode:     SECTION
+CheckPress:
+	LDA #%00001111
+	STA PTBDD;set up bus as input and outputting to 138
+	LDA #%00000011; set up for the 245;
+	NOP
+	NOP
+	LDA PTBD;
+	AND #%11110000
+	NSA;
+	BEQ GoHome; go home if no button has been pressed.
+	STA KeyPress;
+	LDA #%00000010; reading 010 the 273;
+	STA PTBD
+	NOP
+	NOP
+	BSET 3, PTBD; pulling clock high on the 273
+	NOP
+	NOP
+	LDA PTBD; load the bus into A
+	AND #%11110000; anding it to read just the buss
+	ORA KeyPress
+	STA KeyPress;
+	; branches to go places here.
+	
+	
+	RTS;
+	
+	
+GoHome:
+	RTS;

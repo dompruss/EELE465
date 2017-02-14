@@ -1,0 +1,84 @@
+;Dominik J Pruss
+
+;Lab 1 465 
+
+
+; Include derivative-specific definitions
+            INCLUDE 'derivative.inc'
+            
+
+; export symbols
+            XDEF CheckPress;
+            XREF __SEG_END_SSTACK, Selector, SetupPattern   ; symbol defined by the linker for the end of the stack
+
+
+
+
+
+
+
+
+MY_ZEROPAGE: SECTION  SHORT         ; Insert here your data definition
+KeyPress:	DS.B 1
+
+
+
+MyCode:     SECTION
+CheckPress:
+	CLR KeyPress;
+	LDA #%00001111
+	STA PTBDD;set up bus as input and outputting to 138
+	LDA #%00000011; set up for the 245;
+	STA PTBD;
+	NOP
+	NOP
+	LDA PTBD;
+	AND #%11110000
+	NSA;
+	EOR #%00001111; if no button has been pressed it should go to 0
+	Beq GoHome; go home if no button has been pressed.
+	STA KeyPress;
+	LDA #%00000010; reading 010 the 273;
+	STA PTBD
+	NOP
+	NOP
+	BSET 3, PTBD; pulling clock high on the 273
+	NOP
+	NOP
+	LDA PTBD; load the bus into A
+	AND #%11110000; anding it to read just the buss
+	ORA KeyPress; adding it to the Keypress;
+	STA KeyPress;
+	CBEQA #%10000001,SetPatA;
+	CBEQA #%01000001,SetPatB;
+	CBEQA #%00100001,SetPatA;
+	CBEQA #%00010001,SetPatA;
+	
+	
+	
+	RTS;
+
+SetPatA:
+	CLR Selector;
+	JSR
+	JSR 
+	
+SetPatB:
+	CLR Selector
+	INC Selector;
+	RTS
+	
+SetPatC:
+	CLR Selector;
+	INC Selector;
+	INC Selector;
+	RTS
+	
+SetPatD:
+	CLR Selector;
+	INC Selector;
+	INC Selector;
+	INC Selector;
+	RTS
+GoHome:
+	RTS;

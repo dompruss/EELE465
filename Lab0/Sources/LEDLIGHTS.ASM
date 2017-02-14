@@ -1,0 +1,210 @@
+
+;Dominik J Pruss
+
+;Lab 1 465 
+
+
+; Include derivative-specific definitions
+            INCLUDE 'derivative.inc'
+            
+
+; export symbols
+            XDEF SetupPattern, SelectPattern;
+            XREF __SEG_END_SSTACK, Selector   ; symbol defined by the linker for the end of the stack
+
+
+
+
+MY_ZEROPAGE: SECTION  SHORT         ; Insert here your data definition
+StepsLeft:	DS.B 1
+Pattern: 	DS.B 1
+Shifter:    DS.B 1
+Adder:		DS.B 1
+PartOne:	DS.B 1
+KeyPress:	DS.B 1
+
+
+
+
+MyCode:     SECTION
+
+SetupPattern:
+	CLR StepsLeft;
+	CLR Shifter;
+	CLR Adder;
+	LDA Selector;
+	BEQ SetPatternA;
+	DECA
+	BEQ SetPatternB;
+	DECA
+	BEQ SetPatternC;
+	BRA SetPatternD
+SetPatternA:
+	LDA #%01010101;
+	STA Pattern;
+	RTS;
+SetPatternB:
+	LDA #%01111111;
+	STA Pattern;
+	LDA #8
+	STA StepsLeft;
+	RTS;
+SetPatternC:
+	LDA #%00011000;
+	STA Pattern;
+	LDA #3;
+	STA Shifter;
+	LDA #6
+	STA StepsLeft;
+	RTS;
+SetPatternD:
+	LDA #%00111100;
+	STA Pattern;
+	LDA #5;
+	STA Shifter;
+	LDA #3
+	STA Adder
+	LDA #12
+	STA StepsLeft;
+	RTS;
+	
+
+SelectPattern:;First thing after we get here is change our update variable by decreasing it
+	
+	LDA Selector;
+	BEQ PatternA;
+	DECA;
+	BEQ PatternB
+	DECA;
+	BEQ PatternC;
+	BRA PatternD
+	
+PatternA:
+	LDA #%11111111;setting the bus as output
+	STA PTBDD;
+	LDA Pattern;;loading pattern and sending it.
+	JSR SendOne;
+	LDA Pattern;
+	JSR SendTwo;
+	RTS
+
+PatternB:
+	;setting the bus as output
+	LDA #%11111111;
+	STA PTBDD;
+	;loading pattern and sending it.
+	LDA Pattern;
+	JSR SendOne;
+	LDA Pattern;
+	NSA;
+	JSR SendTwo;
+	SEC;
+	ROR Pattern;	;Rotate Right through Carry#
+	DEC StepsLeft;
+	LDA StepsLeft;
+	BEQ SetupPattern;	
+	RTS
+
+SetupStepper:
+	BRA SetupPattern;
+PatternC:
+	LDA #%11111111;setting the bus as output
+	STA PTBDD;loading pattern and sending it.
+	LDA Pattern;
+	JSR SendOne;
+	LDA Pattern;
+	NSA;
+	JSR SendTwo;
+	LDA Shifter;
+	BEQ PatternCIn;
+PatternCOut:
+	DEC Shifter
+	LDA Pattern;
+	;shift it right once
+	LSRA
+	AND #%00000111
+	;now we should have the right half correct
+	STA PartOne;
+	LDA Pattern;
+	LSLA
+	AND #%11100000
+	;now we should have the left half correct so we or it with partOne
+	ORA PartOne;
+	STA Pattern;
+	BRA PatternCEnd;
+PatternCIn:
+	LDA Pattern;
+	;shift it right once
+	LSRA
+	AND #%01110000
+	;now we should have the left half correct
+	STA PartOne;
+	LDA Pattern;
+	LSLA
+	AND #%00001110
+	;now we should have the right half correct so we or it with the first half 
+	ORA PartOne;
+	STA Pattern;
+PatternCEnd:
+	DEC StepsLeft;
+	LDA StepsLeft;
+	BEQ SetupStepper;
+	RTS
+	
+PatternD:
+	LDA #%11111111;
+	STA PTBDD;;setting the bus as output
+	LDA Pattern;;loading pattern and sending it.
+	JSR SendOne;
+	LDA Pattern;
+	NSA;Nibble swapping pattern and sending it on the second half
+	JSR SendTwo;
+	LDA Shifter;;check if we are going in or out
+	BEQ PatternDIn;
+PatternDOut:
+	DEC Shifter;
+	LSR Pattern;
+	LDA Pattern;
+	BRA PatternDEnd;
+PatternDIn:
+	LSL Pattern;
+	LDA Adder;;check if we have to add a 1 at the end
+	BEQ PatternDEnd;
+	INC Pattern;
+	DEC Adder;
+PatternDEnd:
+	DEC StepsLeft;
+	LDA StepsLeft;
+	BEQ SetupStepper;
+	RTS
+	
+
+SendOne:
+	;Pattern is in A, and we want to send it all out of PTBD
+	;so we have to clear the lower ports to send to 138
+	AND #%11110000
+	;now we have the pattern I want in slots 7->4 so OR with destination 000
+	ORA #%00000000
+	STA PTBD;
+	NOP
+	NOP;No op twice to give some time, then clear the PTBD 4 to send 1's and pull up the clock
+	BSET 3, PTBD; 
+	
+	RTS;
+
+
+
+SendTwo:
+	;Pattern is in A, and we want to send it all out of PTBD
+	;so we have to clear the lower ports to send to 138
+	AND #%11110000
+	;now we have the pattern I want in slots 7->4 so OR with destination 001
+	ORA #%00000001
+	STA PTBD;
+	NOP
+	NOP;No op twice to give some time, then clear the PTBD 4 to send 1's and pull up the clock
+	BSET 3, PTBD; 
+	RTS;
+
+	
+		

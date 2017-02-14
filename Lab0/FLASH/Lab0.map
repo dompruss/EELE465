@@ -12,83 +12,155 @@ Linker      : SmartLinker V-5.0.51 Build 14019, Jan 20 2014
 *********************************************************************************************
 FILE SECTION
 ---------------------------------------------------------------------------------------------
+KeyPressedReader_asm.obj                Model: SMALL,         Lang: Assembler
+LEDLIGHTS_ASM.obj                       Model: SMALL,         Lang: Assembler
 main_asm.obj                            Model: SMALL,         Lang: Assembler
 
 *********************************************************************************************
 STARTUP SECTION
 ---------------------------------------------------------------------------------------------
-Entry point: 0xF8 (_Startup)
+Entry point: 0xE000 (_Startup)
 
 *********************************************************************************************
 SECTION-ALLOCATION SECTION
 Section Name                    Size  Type     From       To       Segment
 ---------------------------------------------------------------------------------------------
-main_asm__ORG00001                89     R       0xF0      0x148   .absSeg0
+.init                             84     R     0xE000     0xE053   ROM
+MY_ZEROPAGE                       11   R/W       0x60       0x6A   Z_RAM
+MyCode                           337     R     0xE054     0xE1A4   ROM
 .stack                            64   R/W      0x100      0x13F   RAM
-.vectSeg1_vect                     2     R     0xFFE6     0xFFE7   .vectSeg1
-.vectSeg2_vect                     2     R     0xFFFE     0xFFFF   .vectSeg2
+.vectSeg0_vect                     2     R     0xFFE6     0xFFE7   .vectSeg0
+.vectSeg1_vect                     2     R     0xFFFE     0xFFFF   .vectSeg1
 
 Summary of section sizes per section type:
-READ_ONLY (R):          5D (dec:       93)
-READ_WRITE (R/W):       40 (dec:       64)
+READ_ONLY (R):         1A9 (dec:      425)
+READ_WRITE (R/W):       4B (dec:       75)
 
 *********************************************************************************************
 VECTOR-ALLOCATION SECTION
     Address     InitValue   InitFunction
 ---------------------------------------------------------------------------------------------
-     0xFFE6         0x144   Vmtim_U
-     0xFFFE          0xF8   _Startup
+     0xFFE6        0xE048   Vmtim_U
+     0xFFFE        0xE000   _Startup
 
 *********************************************************************************************
 OBJECT-ALLOCATION SECTION
      Name               Module                 Addr   hSize   dSize     Ref    Section   RLIB
 ---------------------------------------------------------------------------------------------
+MODULE:                 -- KeyPressedReader_asm.obj --
+- PROCEDURES:
+     CheckPress                                E054      36      54       1   MyCode      
+     SetPatA                                   E08A       6       6       0   MyCode      
+     SetPatB                                   E090      1E      30       0   MyCode      
+     GoHome                                    E0AE       1       1       0   MyCode      
+- VARIABLES:
+     KeyPress                                    60       1       1       4   MY_ZEROPAGE 
+MODULE:                 -- LEDLIGHTS_ASM.obj --
+- PROCEDURES:
+     SetupPattern                              E0AF      13      19       5   MyCode      
+     SetPatternA                               E0C2       5       5       0   MyCode      
+     SetPatternB                               E0C7       9       9       0   MyCode      
+     SetPatternC                               E0D0       D      13       0   MyCode      
+     SetPatternD                               E0DD      11      17       0   MyCode      
+     SelectPattern                             E0EE       D      13       1   MyCode      
+     PatternA                                  E0FB       F      15       0   MyCode      
+     PatternB                                  E10A      19      25       0   MyCode      
+     SetupStepper                              E123       2       2       0   MyCode      
+     PatternC                                  E125      27      39       0   MyCode      
+     PatternCIn                                E14C      10      16       0   MyCode      
+     PatternCEnd                               E15C       7       7       0   MyCode      
+     PatternD                                  E163      1B      27       0   MyCode      
+     PatternDIn                                E17E       A      10       0   MyCode      
+     PatternDEnd                               E188       7       7       0   MyCode      
+     SendOne                                   E18F       B      11       4   MyCode      
+     SendTwo                                   E19A       B      11       4   MyCode      
+- VARIABLES:
+     StepsLeft                                   61       1       1      10   MY_ZEROPAGE 
+     Pattern                                     62       1       1      23   MY_ZEROPAGE 
+     Shifter                                     63       1       1       7   MY_ZEROPAGE 
+     Adder                                       64       1       1       4   MY_ZEROPAGE 
+     PartOne                                     65       1       1       4   MY_ZEROPAGE 
+     KeyPress                                    66       1       1       0   MY_ZEROPAGE 
 MODULE:                 -- main_asm.obj --
 - PROCEDURES:
-     _Startup                                    F8      22      34       0   .init       
-     main                                        F8       0       0       0   .init       
-     mainLoop                                   11A       6       6       0   .init       
-     LEDToggle                                  120      16      22       0   .init       
-     LEDOn                                      136       A      10       0   .init       
-     Return                                     140       4       4       0   .init       
-     Vmtim_U                                    144       5       5       0   .init       
+     _Startup                                  E000      25      37       0   .init       
+     main                                      E000       0       0       0   .init       
+     mainLoop                                  E025       D      13       0   .init       
+     LEDToggle                                 E032      10      16       0   .init       
+     LEDOn                                     E042       6       6       0   .init       
+     Vmtim_U                                   E048       5       5       0   .init       
+     JumpToLEDS                                E04D       7       7       0   .init       
 - VARIABLES:
-     Counter1                                    F0       1       1       0   .init       
-     Counter2                                    F1       1       1       0   .init       
-     Counter3                                    F2       1       1       0   .init       
-     LEDStatus                                   F3       1       1       0   .init       
-     BUSLINE                                     F4       4       4       0   .init       
+     Counter1                                    67       1       1       5   MY_ZEROPAGE 
+     LEDStatus                                   68       1       1       4   MY_ZEROPAGE 
+     UpdateLEDS                                  69       1       1       3   MY_ZEROPAGE 
+     Selector                                    6A       1       1      13   MY_ZEROPAGE 
 
 *********************************************************************************************
 MODULE STATISTIC
   Name                                      Data   Code  Const
 ---------------------------------------------------------------------------------------------
-  main_asm.obj                                 0     89      0
+  KeyPressedReader_asm.obj                     1     91      0
+  LEDLIGHTS_ASM.obj                            6    246      0
+  main_asm.obj                                 4     84      0
   other                                       64      4      0
 
 *********************************************************************************************
 SECTION USE IN OBJECT-ALLOCATION SECTION
 ---------------------------------------------------------------------------------------------
 SECTION: ".init"
-  Counter1 Counter2 Counter3 LEDStatus BUSLINE main _Startup mainLoop 
-  LEDToggle LEDOn Return Vmtim_U 
+  main _Startup mainLoop LEDToggle LEDOn Vmtim_U JumpToLEDS 
+SECTION: "MY_ZEROPAGE"
+  KeyPress StepsLeft Pattern Shifter Adder PartOne KeyPress Counter1 LEDStatus 
+  UpdateLEDS Selector 
+SECTION: "MyCode"
+  CheckPress SetPatA SetPatB GoHome SetupPattern SetPatternA SetPatternB 
+  SetPatternC SetPatternD SelectPattern PatternA PatternB SetupStepper PatternC 
+  PatternCIn PatternCEnd PatternD PatternDIn PatternDEnd SendOne SendTwo 
 
 *********************************************************************************************
 OBJECT LIST SORTED BY ADDRESS
      Name                                      Addr   hSize   dSize     Ref    Section   RLIB
 ---------------------------------------------------------------------------------------------
-     Counter1                                    F0       1       1       0   .init       
-     Counter2                                    F1       1       1       0   .init       
-     Counter3                                    F2       1       1       0   .init       
-     LEDStatus                                   F3       1       1       0   .init       
-     BUSLINE                                     F4       4       4       0   .init       
-     main                                        F8       0       0       0   .init       
-     _Startup                                    F8      22      34       0   .init       
-     mainLoop                                   11A       6       6       0   .init       
-     LEDToggle                                  120      16      22       0   .init       
-     LEDOn                                      136       A      10       0   .init       
-     Return                                     140       4       4       0   .init       
-     Vmtim_U                                    144       5       5       0   .init       
+     KeyPress                                    60       1       1       4   MY_ZEROPAGE 
+     StepsLeft                                   61       1       1      10   MY_ZEROPAGE 
+     Pattern                                     62       1       1      23   MY_ZEROPAGE 
+     Shifter                                     63       1       1       7   MY_ZEROPAGE 
+     Adder                                       64       1       1       4   MY_ZEROPAGE 
+     PartOne                                     65       1       1       4   MY_ZEROPAGE 
+     KeyPress                                    66       1       1       0   MY_ZEROPAGE 
+     Counter1                                    67       1       1       5   MY_ZEROPAGE 
+     LEDStatus                                   68       1       1       4   MY_ZEROPAGE 
+     UpdateLEDS                                  69       1       1       3   MY_ZEROPAGE 
+     Selector                                    6A       1       1      13   MY_ZEROPAGE 
+     main                                      E000       0       0       0   .init       
+     _Startup                                  E000      25      37       0   .init       
+     mainLoop                                  E025       D      13       0   .init       
+     LEDToggle                                 E032      10      16       0   .init       
+     LEDOn                                     E042       6       6       0   .init       
+     Vmtim_U                                   E048       5       5       0   .init       
+     JumpToLEDS                                E04D       7       7       0   .init       
+     CheckPress                                E054      36      54       1   MyCode      
+     SetPatA                                   E08A       6       6       0   MyCode      
+     SetPatB                                   E090      1E      30       0   MyCode      
+     GoHome                                    E0AE       1       1       0   MyCode      
+     SetupPattern                              E0AF      13      19       5   MyCode      
+     SetPatternA                               E0C2       5       5       0   MyCode      
+     SetPatternB                               E0C7       9       9       0   MyCode      
+     SetPatternC                               E0D0       D      13       0   MyCode      
+     SetPatternD                               E0DD      11      17       0   MyCode      
+     SelectPattern                             E0EE       D      13       1   MyCode      
+     PatternA                                  E0FB       F      15       0   MyCode      
+     PatternB                                  E10A      19      25       0   MyCode      
+     SetupStepper                              E123       2       2       0   MyCode      
+     PatternC                                  E125      27      39       0   MyCode      
+     PatternCIn                                E14C      10      16       0   MyCode      
+     PatternCEnd                               E15C       7       7       0   MyCode      
+     PatternD                                  E163      1B      27       0   MyCode      
+     PatternDIn                                E17E       A      10       0   MyCode      
+     PatternDEnd                               E188       7       7       0   MyCode      
+     SendOne                                   E18F       B      11       4   MyCode      
+     SendTwo                                   E19A       B      11       4   MyCode      
 
 *********************************************************************************************
 UNUSED-OBJECTS SECTION
@@ -101,6 +173,29 @@ COPYDOWN SECTION
 *********************************************************************************************
 OBJECT-DEPENDENCIES SECTION
 ---------------------------------------------------------------------------------------------
+_Startup                  USES Counter1 LEDStatus Selector SetupPattern 
+mainLoop                  USES CheckPress Counter1 UpdateLEDS 
+LEDToggle                 USES Counter1 UpdateLEDS LEDStatus 
+LEDOn                     USES LEDStatus 
+Vmtim_U                   USES Counter1 
+JumpToLEDS                USES SelectPattern UpdateLEDS 
+CheckPress                USES KeyPress 
+SetPatA                   USES Selector SetupPattern 
+SetPatB                   USES Selector SetupPattern 
+SetupPattern              USES StepsLeft Shifter Adder Selector 
+SetPatternA               USES Pattern 
+SetPatternB               USES Pattern StepsLeft 
+SetPatternC               USES Pattern Shifter StepsLeft 
+SetPatternD               USES Pattern Shifter Adder StepsLeft 
+SelectPattern             USES Selector 
+PatternA                  USES Pattern SendOne SendTwo 
+PatternB                  USES Pattern SendOne SendTwo StepsLeft 
+PatternC                  USES Pattern SendOne SendTwo Shifter PartOne 
+PatternCIn                USES Pattern PartOne 
+PatternCEnd               USES StepsLeft 
+PatternD                  USES Pattern SendOne SendTwo Shifter 
+PatternDIn                USES Pattern Adder 
+PatternDEnd               USES StepsLeft 
 
 *********************************************************************************************
 DEPENDENCY TREE
@@ -110,7 +205,11 @@ DEPENDENCY TREE
  +- main                
  |    
  +- _Startup            
-      
+    | 
+    +- SetupPattern        
+         
+ Vmtim_U             
+   
 *********************************************************************************************
 STATISTIC SECTION
 ---------------------------------------------------------------------------------------------
@@ -118,5 +217,5 @@ STATISTIC SECTION
 ExeFile:
 --------
 Number of blocks to be downloaded: 3
-Total size of all blocks to be downloaded: 93
+Total size of all blocks to be downloaded: 425
 
