@@ -1,8 +1,0 @@
-"$(ProjDirPath)/Project_Settings/Linker_Files/Project.prm"
--M
--ViewHidden
--WmsgFob"%f%e:%l:%k:%d %m\n" 
--Add("$(ProjDirPath)/FLASH/Sources/LEDLIGHTS_ASM.obj"
-"$(ProjDirPath)/FLASH/Sources/main_asm.obj"
-"$(ProjDirPath)/FLASH/.metadata/.plugins/org.eclipse.cdt.make.core/specs_c.obj"
-"$(ProjDirPath)/FLASH/.metadata/.plugins/org.eclipse.cdt.make.core/specs_cpp.obj" )

@@ -27,13 +27,13 @@ Section Name                    Size  Type     From       To       Segment
 ---------------------------------------------------------------------------------------------
 .init                             84     R     0xE000     0xE053   ROM
 MY_ZEROPAGE                       11   R/W       0x60       0x6A   Z_RAM
-MyCode                           337     R     0xE054     0xE1A4   ROM
+MyCode                           478     R     0xE054     0xE231   ROM
 .stack                            64   R/W      0x100      0x13F   RAM
 .vectSeg0_vect                     2     R     0xFFE6     0xFFE7   .vectSeg0
 .vectSeg1_vect                     2     R     0xFFFE     0xFFFF   .vectSeg1
 
 Summary of section sizes per section type:
-READ_ONLY (R):         1A9 (dec:      425)
+READ_ONLY (R):         236 (dec:      566)
 READ_WRITE (R/W):       4B (dec:       75)
 
 *********************************************************************************************
@@ -49,31 +49,37 @@ OBJECT-ALLOCATION SECTION
 ---------------------------------------------------------------------------------------------
 MODULE:                 -- KeyPressedReader_asm.obj --
 - PROCEDURES:
-     CheckPress                                E054      36      54       1   MyCode      
-     SetPatA                                   E08A       6       6       0   MyCode      
-     SetPatB                                   E090      1E      30       0   MyCode      
-     GoHome                                    E0AE       1       1       0   MyCode      
+     CheckPress                                E054      1F      31       1   MyCode      
+     SetPatA                                   E073       6       6       0   MyCode      
+     SetPatB                                   E079       8       8       0   MyCode      
+     SetPatC                                   E081       A      10       0   MyCode      
+     SetPatD                                   E08B       C      12       0   MyCode      
+     CheckRowD                                 E097      29      41       1   MyCode      
+     GoHome                                    E0C0       1       1       0   MyCode      
+     CheckRowC                                 E0C1      29      41       1   MyCode      
+     CheckRowB                                 E0EA      29      41       1   MyCode      
+     CheckRowA                                 E113      29      41       1   MyCode      
 - VARIABLES:
-     KeyPress                                    60       1       1       4   MY_ZEROPAGE 
+     KeyPress                                    60       1       1      14   MY_ZEROPAGE 
 MODULE:                 -- LEDLIGHTS_ASM.obj --
 - PROCEDURES:
-     SetupPattern                              E0AF      13      19       5   MyCode      
-     SetPatternA                               E0C2       5       5       0   MyCode      
-     SetPatternB                               E0C7       9       9       0   MyCode      
-     SetPatternC                               E0D0       D      13       0   MyCode      
-     SetPatternD                               E0DD      11      17       0   MyCode      
-     SelectPattern                             E0EE       D      13       1   MyCode      
-     PatternA                                  E0FB       F      15       0   MyCode      
-     PatternB                                  E10A      19      25       0   MyCode      
-     SetupStepper                              E123       2       2       0   MyCode      
-     PatternC                                  E125      27      39       0   MyCode      
-     PatternCIn                                E14C      10      16       0   MyCode      
-     PatternCEnd                               E15C       7       7       0   MyCode      
-     PatternD                                  E163      1B      27       0   MyCode      
-     PatternDIn                                E17E       A      10       0   MyCode      
-     PatternDEnd                               E188       7       7       0   MyCode      
-     SendOne                                   E18F       B      11       4   MyCode      
-     SendTwo                                   E19A       B      11       4   MyCode      
+     SetupPattern                              E13C      13      19       5   MyCode      
+     SetPatternA                               E14F       5       5       0   MyCode      
+     SetPatternB                               E154       9       9       0   MyCode      
+     SetPatternC                               E15D       D      13       0   MyCode      
+     SetPatternD                               E16A      11      17       0   MyCode      
+     SelectPattern                             E17B       D      13       1   MyCode      
+     PatternA                                  E188       F      15       0   MyCode      
+     PatternB                                  E197      19      25       0   MyCode      
+     SetupStepper                              E1B0       2       2       0   MyCode      
+     PatternC                                  E1B2      27      39       0   MyCode      
+     PatternCIn                                E1D9      10      16       0   MyCode      
+     PatternCEnd                               E1E9       7       7       0   MyCode      
+     PatternD                                  E1F0      1B      27       0   MyCode      
+     PatternDIn                                E20B       A      10       0   MyCode      
+     PatternDEnd                               E215       7       7       0   MyCode      
+     SendOne                                   E21C       B      11       4   MyCode      
+     SendTwo                                   E227       B      11       4   MyCode      
 - VARIABLES:
      StepsLeft                                   61       1       1      10   MY_ZEROPAGE 
      Pattern                                     62       1       1      23   MY_ZEROPAGE 
@@ -100,7 +106,7 @@ MODULE:                 -- main_asm.obj --
 MODULE STATISTIC
   Name                                      Data   Code  Const
 ---------------------------------------------------------------------------------------------
-  KeyPressedReader_asm.obj                     1     91      0
+  KeyPressedReader_asm.obj                     1    232      0
   LEDLIGHTS_ASM.obj                            6    246      0
   main_asm.obj                                 4     84      0
   other                                       64      4      0
@@ -114,15 +120,16 @@ SECTION: "MY_ZEROPAGE"
   KeyPress StepsLeft Pattern Shifter Adder PartOne KeyPress Counter1 LEDStatus 
   UpdateLEDS Selector 
 SECTION: "MyCode"
-  CheckPress SetPatA SetPatB GoHome SetupPattern SetPatternA SetPatternB 
-  SetPatternC SetPatternD SelectPattern PatternA PatternB SetupStepper PatternC 
-  PatternCIn PatternCEnd PatternD PatternDIn PatternDEnd SendOne SendTwo 
+  CheckPress SetPatA SetPatB SetPatC SetPatD CheckRowD GoHome CheckRowC 
+  CheckRowB CheckRowA SetupPattern SetPatternA SetPatternB SetPatternC 
+  SetPatternD SelectPattern PatternA PatternB SetupStepper PatternC PatternCIn 
+  PatternCEnd PatternD PatternDIn PatternDEnd SendOne SendTwo 
 
 *********************************************************************************************
 OBJECT LIST SORTED BY ADDRESS
      Name                                      Addr   hSize   dSize     Ref    Section   RLIB
 ---------------------------------------------------------------------------------------------
-     KeyPress                                    60       1       1       4   MY_ZEROPAGE 
+     KeyPress                                    60       1       1      14   MY_ZEROPAGE 
      StepsLeft                                   61       1       1      10   MY_ZEROPAGE 
      Pattern                                     62       1       1      23   MY_ZEROPAGE 
      Shifter                                     63       1       1       7   MY_ZEROPAGE 
@@ -140,27 +147,33 @@ OBJECT LIST SORTED BY ADDRESS
      LEDOn                                     E042       6       6       0   .init       
      Vmtim_U                                   E048       5       5       0   .init       
      JumpToLEDS                                E04D       7       7       0   .init       
-     CheckPress                                E054      36      54       1   MyCode      
-     SetPatA                                   E08A       6       6       0   MyCode      
-     SetPatB                                   E090      1E      30       0   MyCode      
-     GoHome                                    E0AE       1       1       0   MyCode      
-     SetupPattern                              E0AF      13      19       5   MyCode      
-     SetPatternA                               E0C2       5       5       0   MyCode      
-     SetPatternB                               E0C7       9       9       0   MyCode      
-     SetPatternC                               E0D0       D      13       0   MyCode      
-     SetPatternD                               E0DD      11      17       0   MyCode      
-     SelectPattern                             E0EE       D      13       1   MyCode      
-     PatternA                                  E0FB       F      15       0   MyCode      
-     PatternB                                  E10A      19      25       0   MyCode      
-     SetupStepper                              E123       2       2       0   MyCode      
-     PatternC                                  E125      27      39       0   MyCode      
-     PatternCIn                                E14C      10      16       0   MyCode      
-     PatternCEnd                               E15C       7       7       0   MyCode      
-     PatternD                                  E163      1B      27       0   MyCode      
-     PatternDIn                                E17E       A      10       0   MyCode      
-     PatternDEnd                               E188       7       7       0   MyCode      
-     SendOne                                   E18F       B      11       4   MyCode      
-     SendTwo                                   E19A       B      11       4   MyCode      
+     CheckPress                                E054      1F      31       1   MyCode      
+     SetPatA                                   E073       6       6       0   MyCode      
+     SetPatB                                   E079       8       8       0   MyCode      
+     SetPatC                                   E081       A      10       0   MyCode      
+     SetPatD                                   E08B       C      12       0   MyCode      
+     CheckRowD                                 E097      29      41       1   MyCode      
+     GoHome                                    E0C0       1       1       0   MyCode      
+     CheckRowC                                 E0C1      29      41       1   MyCode      
+     CheckRowB                                 E0EA      29      41       1   MyCode      
+     CheckRowA                                 E113      29      41       1   MyCode      
+     SetupPattern                              E13C      13      19       5   MyCode      
+     SetPatternA                               E14F       5       5       0   MyCode      
+     SetPatternB                               E154       9       9       0   MyCode      
+     SetPatternC                               E15D       D      13       0   MyCode      
+     SetPatternD                               E16A      11      17       0   MyCode      
+     SelectPattern                             E17B       D      13       1   MyCode      
+     PatternA                                  E188       F      15       0   MyCode      
+     PatternB                                  E197      19      25       0   MyCode      
+     SetupStepper                              E1B0       2       2       0   MyCode      
+     PatternC                                  E1B2      27      39       0   MyCode      
+     PatternCIn                                E1D9      10      16       0   MyCode      
+     PatternCEnd                               E1E9       7       7       0   MyCode      
+     PatternD                                  E1F0      1B      27       0   MyCode      
+     PatternDIn                                E20B       A      10       0   MyCode      
+     PatternDEnd                               E215       7       7       0   MyCode      
+     SendOne                                   E21C       B      11       4   MyCode      
+     SendTwo                                   E227       B      11       4   MyCode      
 
 *********************************************************************************************
 UNUSED-OBJECTS SECTION
@@ -179,9 +192,16 @@ LEDToggle                 USES Counter1 UpdateLEDS LEDStatus
 LEDOn                     USES LEDStatus 
 Vmtim_U                   USES Counter1 
 JumpToLEDS                USES SelectPattern UpdateLEDS 
-CheckPress                USES KeyPress 
+CheckPress                USES KeyPress CheckRowA CheckRowB CheckRowC 
+                                CheckRowD 
 SetPatA                   USES Selector SetupPattern 
 SetPatB                   USES Selector SetupPattern 
+SetPatC                   USES Selector SetupPattern 
+SetPatD                   USES Selector SetupPattern 
+CheckRowD                 USES KeyPress 
+CheckRowC                 USES KeyPress 
+CheckRowB                 USES KeyPress 
+CheckRowA                 USES KeyPress 
 SetupPattern              USES StepsLeft Shifter Adder Selector 
 SetPatternA               USES Pattern 
 SetPatternB               USES Pattern StepsLeft 
@@ -217,5 +237,5 @@ STATISTIC SECTION
 ExeFile:
 --------
 Number of blocks to be downloaded: 3
-Total size of all blocks to be downloaded: 425
+Total size of all blocks to be downloaded: 566
 

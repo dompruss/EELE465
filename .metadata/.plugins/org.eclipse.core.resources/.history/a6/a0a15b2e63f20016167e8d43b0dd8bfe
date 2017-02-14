@@ -1,0 +1,87 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+-include ../makefile.local
+
+# Add inputs and outputs from these tool invocations to the build variables 
+ASM_UPPER_SRCS_QUOTED += \
+"../Sources/LEDLIGHTS.ASM" \
+
+ASM_SRCS += \
+../Sources/KeyPressedReader.asm \
+../Sources/main.asm \
+
+ASM_UPPER_SRCS += \
+../Sources/LEDLIGHTS.ASM \
+
+ASM_SRCS_QUOTED += \
+"../Sources/KeyPressedReader.asm" \
+"../Sources/main.asm" \
+
+OBJS += \
+./Sources/KeyPressedReader_asm.obj \
+./Sources/LEDLIGHTS_ASM.obj \
+./Sources/main_asm.obj \
+
+ASM_DEPS += \
+./Sources/KeyPressedReader_asm.d \
+./Sources/main_asm.d \
+
+OBJS_QUOTED += \
+"./Sources/KeyPressedReader_asm.obj" \
+"./Sources/LEDLIGHTS_ASM.obj" \
+"./Sources/main_asm.obj" \
+
+ASM_DEPS_QUOTED += \
+"./Sources/KeyPressedReader_asm.d" \
+"./Sources/main_asm.d" \
+
+ASM_UPPER_DEPS_QUOTED += \
+"./Sources/LEDLIGHTS_ASM.d" \
+
+ASM_UPPER_DEPS += \
+./Sources/LEDLIGHTS_ASM.d \
+
+OBJS_OS_FORMAT += \
+./Sources/KeyPressedReader_asm.obj \
+./Sources/LEDLIGHTS_ASM.obj \
+./Sources/main_asm.obj \
+
+
+# Each subdirectory must supply rules for building sources it contributes
+Sources/KeyPressedReader_asm.obj: ../Sources/KeyPressedReader.asm
+	@echo 'Building file: $<'
+	@echo 'Executing target #1 $<'
+	@echo 'Invoking: HCS08 Assembler'
+	"$(HC08ToolsEnv)/ahc08" -ArgFile"Sources/KeyPressedReader.args" -Objn"Sources/KeyPressedReader_asm.obj" "$<" -Lm="$(@:%.obj=%.d)" -LmCfg=xilmou
+	@echo 'Finished building: $<'
+	@echo ' '
+
+Sources/%.d: ../Sources/%.asm
+	@echo 'Regenerating dependency file: $@'
+	
+	@echo ' '
+
+Sources/LEDLIGHTS_ASM.obj: ../Sources/LEDLIGHTS.ASM
+	@echo 'Building file: $<'
+	@echo 'Executing target #2 $<'
+	@echo 'Invoking: HCS08 Assembler'
+	"$(HC08ToolsEnv)/ahc08" -ArgFile"Sources/LEDLIGHTS.args" -Objn"Sources/LEDLIGHTS_ASM.obj" "$<" -Lm="$(@:%.obj=%.d)" -LmCfg=xilmou
+	@echo 'Finished building: $<'
+	@echo ' '
+
+Sources/%.d: ../Sources/%.ASM
+	@echo 'Regenerating dependency file: $@'
+	
+	@echo ' '
+
+Sources/main_asm.obj: ../Sources/main.asm
+	@echo 'Building file: $<'
+	@echo 'Executing target #3 $<'
+	@echo 'Invoking: HCS08 Assembler'
+	"$(HC08ToolsEnv)/ahc08" -ArgFile"Sources/main.args" -Objn"Sources/main_asm.obj" "$<" -Lm="$(@:%.obj=%.d)" -LmCfg=xilmou
+	@echo 'Finished building: $<'
+	@echo ' '
+
+
