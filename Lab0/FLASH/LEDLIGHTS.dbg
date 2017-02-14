@@ -2062,6 +2062,7 @@ PatternB:
 
 SetupStepper:
 	BRA SetupPattern;
+	
 PatternC:
 	LDA #%11111111;setting the bus as output
 	STA PTBDD;loading pattern and sending it.

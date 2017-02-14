@@ -42,13 +42,7 @@ _Startup:
 			STA MTIMMOD ; set up the MTIMMOD it will be 255
 			
 			BSET 0, PTADD ; setting led to as output
-			BSET 1, PTADD ; setting led to as output
-			BSET 2, PTADD ; setting led to as output
-			BSET 3, PTADD ; setting led to as output
 			BSET 0, PTAD; ; turning off LED
-			BSET 1, PTAD; ; turning off LED
-			BSET 2, PTAD; ; turning off LED
-			BSET 3, PTAD; ; turning off LED
 			
 			CLI ; enabling interrupts
 			
@@ -71,11 +65,9 @@ LEDToggle:
 LEDOff:
 	DEC LEDStatus ; set variable to know it's off
 	BSET 0, PTAD ; turn led off
-	BSET 2, PTAD
 	BRA mainLoop
 LEDOn:
 	BCLR 0, PTAD ; turn on LED
-	BCLR 2, PTAD
 	INC LEDStatus
 	BRA mainLoop
 
